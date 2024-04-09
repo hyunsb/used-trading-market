@@ -3,9 +3,8 @@ package org.flab.hyunsb.application.service.member;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.flab.hyunsb.application.exception.message.MemberErrorMessage.EMAIL_DUPLICATED;
 import static org.flab.hyunsb.application.exception.message.MemberErrorMessage.MEMBER_NOT_EXIST;
-import static org.flab.hyunsb.application.exception.message.MemberErrorMessage.PASSWORD_NOT_MATCHED;
+import static org.flab.hyunsb.domain.exception.ErrorMessage.*;
 
-import org.flab.hyunsb.application.exception.authentication.MemberPasswordNotMatchedException;
 import org.flab.hyunsb.application.exception.constraint.MemberEmailDuplicatedException;
 import org.flab.hyunsb.application.exception.constraint.MemberNotFoundException;
 import org.flab.hyunsb.application.exception.constraint.RegionInvalidException;
@@ -18,6 +17,7 @@ import org.flab.hyunsb.application.service.member.mock.MockRegionValidator;
 import org.flab.hyunsb.application.util.ActorTokenDateGenerator;
 import org.flab.hyunsb.application.util.DateGenerator;
 import org.flab.hyunsb.application.validator.RegionValidator;
+import org.flab.hyunsb.domain.exception.LoginFailureException;
 import org.flab.hyunsb.domain.member.Member;
 import org.flab.hyunsb.domain.member.MemberForCreate;
 import org.flab.hyunsb.domain.member.MemberForLogin;
@@ -75,9 +75,9 @@ class MemberServiceTest {
 
             // Then
             Assertions.assertAll(
-                () -> Assertions.assertEquals(TEST_REGION_ID, actualMember.regionId()),
-                () -> Assertions.assertEquals(TEST_NICKNAME, actualMember.nickname()),
-                () -> Assertions.assertNotEquals(TEST_PASSWORD, actualMember.password())
+                () -> Assertions.assertEquals(TEST_REGION_ID, actualMember.getRegionId()),
+                () -> Assertions.assertEquals(TEST_NICKNAME, actualMember.getNickname()),
+                () -> Assertions.assertNotEquals(TEST_PASSWORD, actualMember.getPassword())
             );
         }
 
@@ -150,8 +150,8 @@ class MemberServiceTest {
             // When & Then
             Assertions.assertAll(
                 () -> assertThatThrownBy(() -> memberService.login(memberForLogin))
-                    .isInstanceOf(MemberPasswordNotMatchedException.class)
-                    .hasMessage(PASSWORD_NOT_MATCHED.getMessage())
+                    .isInstanceOf(LoginFailureException.class)
+                    .hasMessage(LOGIN_FAILED.getMessage())
             );
         }
     }

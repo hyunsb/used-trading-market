@@ -1,28 +1,48 @@
 package org.flab.hyunsb.domain.member;
 
-import org.flab.hyunsb.domain.member.encryptor.Encryptor;
-import org.flab.hyunsb.domain.member.encryptor.PasswordEncryptor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.flab.hyunsb.domain.exception.LoginFailureException;
 
-public record Member(Long id, Long regionId, String email, String password, String nickname) {
+@Getter
+@AllArgsConstructor
+public class Member {
 
-    private static final Encryptor ENCRYPTOR = PasswordEncryptor.getInstance();
+    private Long id;
+    private Long regionId;
+    private String email;
+    private Password password;
+    private String nickname;
 
     public static Member from(MemberForCreate memberForCreate) {
         return new Member(
             null,
             memberForCreate.regionId(),
             memberForCreate.email(),
-            encryptPassword(memberForCreate.password()),
+            Password.generateWithEncrypting(memberForCreate.password()),
             memberForCreate.nickname()
         );
     }
 
-    private static String encryptPassword(String password) {
-        return ENCRYPTOR.encrypt(password);
+    public void tryToLogin(MemberForLogin memberForLogin) {
+        if (!isMatchingEmail(memberForLogin.email()) ||
+            !password.isMatch(memberForLogin.password())) {
+            throw new LoginFailureException();
+        }
     }
 
-    public boolean isMatchingPassword(String password) {
-        String encryptedPassword = encryptPassword(password);
-        return this.password.equals(encryptedPassword);
+    private boolean isMatchingEmail(String email) {
+        return this.email.equals(email);
+    }
+
+    public String getPassword() {
+        return password.getPassword();
+    }
+
+    public void changePassword(String currentPassword, String newPassword) {
+        if (!password.isMatch(currentPassword)) {
+            throw new IllegalArgumentException();
+        }
+        password = Password.generateWithEncrypting(newPassword);
     }
 }

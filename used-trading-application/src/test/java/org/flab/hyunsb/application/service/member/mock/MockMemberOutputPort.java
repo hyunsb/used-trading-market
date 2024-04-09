@@ -21,7 +21,7 @@ public class MockMemberOutputPort implements MemberOutputPort {
 
     @Override
     public Optional<Member> findByEmail(String email) {
-        if (duplication_email.equals(email) || mockMember.email().equals(email)) {
+        if (duplication_email.equals(email) || mockMember.getEmail().equals(email)) {
             return Optional.of(mockMember);
         }
         return Optional.empty();

@@ -1,7 +1,6 @@
 package org.flab.hyunsb.application.service;
 
 import lombok.RequiredArgsConstructor;
-import org.flab.hyunsb.application.exception.authentication.MemberPasswordNotMatchedException;
 import org.flab.hyunsb.application.exception.constraint.MemberEmailDuplicatedException;
 import org.flab.hyunsb.application.exception.constraint.MemberNotFoundException;
 import org.flab.hyunsb.application.output.MemberOutputPort;
@@ -40,14 +39,9 @@ public class MemberService implements CreateMemberUseCase, LoginUseCase {
     public String login(MemberForLogin memberForLogin) {
         Member member = memberOutputPort.findByEmail(memberForLogin.email())
             .orElseThrow(MemberNotFoundException::new);
-        checkPassword(member, memberForLogin.password());
 
-        return jwtService.createActorToken(member.id());
-    }
+        member.tryToLogin(memberForLogin);
 
-    private void checkPassword(Member member, String password) {
-        if (!member.isMatchingPassword(password)) {
-            throw new MemberPasswordNotMatchedException();
-        }
+        return jwtService.createActorToken(member.getId());
     }
 }
