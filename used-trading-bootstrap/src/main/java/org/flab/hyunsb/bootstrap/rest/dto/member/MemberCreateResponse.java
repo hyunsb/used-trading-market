@@ -5,6 +5,6 @@ import org.flab.hyunsb.domain.member.Member;
 public record MemberCreateResponse(String email, String nickname) {
 
     public static MemberCreateResponse from(Member member) {
-        return new MemberCreateResponse(member.email(), member.nickname());
+        return new MemberCreateResponse(member.getEmail(), member.getNickname());
     }
 }

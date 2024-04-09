@@ -1,7 +1,7 @@
 package org.flab.hyunsb.bootstrap.rest.adapter;
 
 import static org.flab.hyunsb.application.exception.message.MemberErrorMessage.MEMBER_NOT_EXIST;
-import static org.flab.hyunsb.application.exception.message.MemberErrorMessage.PASSWORD_NOT_MATCHED;
+import static org.flab.hyunsb.domain.exception.ErrorMessage.LOGIN_FAILED;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -11,7 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.flab.hyunsb.application.exception.authentication.MemberPasswordNotMatchedException;
 import org.flab.hyunsb.application.exception.constraint.MemberNotFoundException;
 import org.flab.hyunsb.application.usecase.member.ActorTokenAuthUseCase;
 import org.flab.hyunsb.application.usecase.member.CreateMemberUseCase;
@@ -20,9 +19,11 @@ import org.flab.hyunsb.bootstrap.config.ActorTokenConfig;
 import org.flab.hyunsb.bootstrap.rest.dto.member.MemberCreateRequest;
 import org.flab.hyunsb.bootstrap.rest.dto.member.MemberLoginRequest;
 import org.flab.hyunsb.bootstrap.restdocs.AbstractRestDocsTests;
+import org.flab.hyunsb.domain.exception.LoginFailureException;
 import org.flab.hyunsb.domain.member.Member;
 import org.flab.hyunsb.domain.member.MemberForCreate;
 import org.flab.hyunsb.domain.member.MemberForLogin;
+import org.flab.hyunsb.domain.member.Password;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -65,7 +66,9 @@ class MemberRestAdapterTest extends AbstractRestDocsTests {
         when(createMemberUseCase.createMember(any(MemberForCreate.class)))
             .then(invocation -> {
                 MemberForCreate m = invocation.getArgument(0);
-                return new Member(1L, m.regionId(), m.email(), m.password(), m.nickname());
+
+                Password password = Password.generateWithEncrypting(m.password());
+                return new Member(1L, m.regionId(), m.email(), password, m.nickname());
             });
 
         // When & Then
@@ -146,13 +149,13 @@ class MemberRestAdapterTest extends AbstractRestDocsTests {
             new MemberLoginRequest(TEST_EMAIL, TEST_PASSWORD));
 
         Mockito.when(loginUseCase.login(ArgumentMatchers.any(MemberForLogin.class)))
-            .thenThrow(new MemberPasswordNotMatchedException());
+            .thenThrow(new LoginFailureException());
 
         // When & Then
         mockMvc.perform(post(requestUrl)
                 .content(requestBody)
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isUnauthorized())
-            .andExpect(jsonPath("detail", is(PASSWORD_NOT_MATCHED.getMessage())));
+            .andExpect(jsonPath("detail", is(LOGIN_FAILED.getMessage())));
     }
 }

@@ -2,6 +2,7 @@ package org.flab.hyunsb.framework.persistence.adapter;
 
 import java.util.Optional;
 import org.flab.hyunsb.domain.member.Member;
+import org.flab.hyunsb.domain.member.Password;
 import org.flab.hyunsb.framework.persistence.entity.region.RegionEntity;
 import org.flab.hyunsb.framework.persistence.repository.RegionRepository;
 import org.flab.hyunsb.framework.repository.annotation.RepositoryTest;
@@ -34,10 +35,10 @@ class MemberPersistenceAdapterTest {
         Member actualMember = memberPersistenceAdapter.saveMember(member);
         // Then
         Assertions.assertAll(
-            () -> Assertions.assertNotNull(actualMember.id()),
-            () -> Assertions.assertEquals(member.email(), actualMember.email()),
-            () -> Assertions.assertEquals(member.password(), actualMember.password()),
-            () -> Assertions.assertEquals(member.nickname(), actualMember.nickname())
+            () -> Assertions.assertNotNull(actualMember.getId()),
+            () -> Assertions.assertEquals(member.getEmail(), actualMember.getEmail()),
+            () -> Assertions.assertEquals(member.getPassword(), actualMember.getPassword()),
+            () -> Assertions.assertEquals(member.getNickname(), actualMember.getNickname())
         );
     }
 
@@ -45,8 +46,11 @@ class MemberPersistenceAdapterTest {
         Long id = 0L;
         Long regionId = testRegionEntity.getId();
         String email = "email@email";
-        String password = "password";
         String nickname = "nickname";
+
+        String originPassword = "password";
+        Password password = Password.generateWithEncrypting(originPassword);
+
         return new Member(id, regionId, email, password, nickname);
     }
 
@@ -56,11 +60,11 @@ class MemberPersistenceAdapterTest {
         // Given
         Member member = memberPersistenceAdapter.saveMember(generateTestMember());
         // When 
-        Optional<Member> optionalMember = memberPersistenceAdapter.findByEmail(member.email());
+        Optional<Member> optionalMember = memberPersistenceAdapter.findByEmail(member.getEmail());
         // Then
         Assertions.assertAll(
             () -> Assertions.assertTrue(optionalMember.isPresent()),
-            () -> Assertions.assertEquals(member.id(), optionalMember.get().id())
+            () -> Assertions.assertEquals(member.getId(), optionalMember.get().getId())
         );
     }
 
