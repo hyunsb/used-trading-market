@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.flab.hyunsb.domain.member.Member;
-import org.flab.hyunsb.domain.member.MemberForCreate;
+import org.flab.hyunsb.domain.member.Password;
 import org.flab.hyunsb.framework.persistence.entity.basetime.BaseTimeEntity;
 import org.flab.hyunsb.framework.persistence.entity.region.RegionEntity;
 import org.hibernate.annotations.DynamicUpdate;
@@ -43,16 +43,16 @@ public class MemberEntity extends BaseTimeEntity {
     private String nickname;
 
     public Member toDomain() {
-        return new Member(id, region.getId(), email, password, nickname);
+        return new Member(id, region.getId(), email, Password.valueOf(password), nickname);
     }
 
     public static MemberEntity from(Member member) {
         return new MemberEntity(
-            member.id(),
-            RegionEntity.valueOf(member.regionId()),
-            member.email(),
-            member.password(),
-            member.nickname()
+            member.getId(),
+            RegionEntity.valueOf(member.getRegionId()),
+            member.getEmail(),
+            member.getPassword(),
+            member.getNickname()
         );
     }
 }

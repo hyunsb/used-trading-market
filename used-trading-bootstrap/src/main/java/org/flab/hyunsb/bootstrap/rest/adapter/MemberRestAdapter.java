@@ -1,11 +1,16 @@
 package org.flab.hyunsb.bootstrap.rest.adapter;
 
+import static org.flab.hyunsb.bootstrap.config.ActorTokenConfig.ACTOR_TOKEN_HEADER;
+
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.flab.hyunsb.application.usecase.member.CreateMemberUseCase;
+import org.flab.hyunsb.application.usecase.member.LoginUseCase;
 import org.flab.hyunsb.bootstrap.rest.dto.member.MemberCreateRequest;
 import org.flab.hyunsb.bootstrap.rest.dto.member.MemberCreateResponse;
+import org.flab.hyunsb.bootstrap.rest.dto.member.MemberLoginRequest;
 import org.flab.hyunsb.domain.member.Member;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberRestAdapter {
 
     private final CreateMemberUseCase createMemberUseCase;
+    private final LoginUseCase loginUseCase;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -30,6 +36,17 @@ public class MemberRestAdapter {
 
         Member member = createMemberUseCase.createMember(memberCreateRequest.toMemberForCreate());
         return MemberCreateResponse.from(member);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/login")
+    public void login(
+        @Valid @RequestBody MemberLoginRequest memberLoginRequest,
+        HttpServletResponse response) {
+        log.info("memberLoginRequest={}", memberLoginRequest);
+
+        String accessToken = loginUseCase.login(memberLoginRequest.toMemberForLogin());
+        response.setHeader(ACTOR_TOKEN_HEADER, accessToken);
     }
 }
 
