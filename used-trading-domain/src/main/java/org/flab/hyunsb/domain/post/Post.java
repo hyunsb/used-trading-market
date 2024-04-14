@@ -21,8 +21,11 @@ public class Post {
 
     private Status status;
     private Price price;
+
+    private String title;
     private String description;
     private Images images;
+
     private Count viewCount;
     private Count likeCount;
 
@@ -34,6 +37,7 @@ public class Post {
             .categoryId(postForCreate.categoryId())
             .status(Status.SELLING)
             .price(postForCreate.price())
+            .title(postForCreate.title())
             .description(postForCreate.description())
             .images(postForCreate.images())
             .viewCount(new Count())

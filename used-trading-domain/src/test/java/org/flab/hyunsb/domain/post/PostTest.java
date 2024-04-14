@@ -14,8 +14,10 @@ public class PostTest {
         // Given
         Price price = new Price(100);
         String description = "testDescription";
+        String title = "testTitle";
         Images images = Images.generateImagesExcludeThumbnail(List.of("image1"));
-        PostForCreate postForCreate = new PostForCreate(1L, 2L, 3L, price, description, images);
+        PostForCreate postForCreate =
+            new PostForCreate(1L, 2L, 3L, price, title, description, images);
         // When
         Post post = Post.from(postForCreate);
         // Then
@@ -25,6 +27,7 @@ public class PostTest {
             () -> Assertions.assertEquals(2L, post.getRegionId()),
             () -> Assertions.assertEquals(3L, post.getCategoryId()),
             () -> Assertions.assertEquals(price, post.getPrice()),
+            () -> Assertions.assertEquals(title, post.getTitle()),
             () -> Assertions.assertEquals(description, post.getDescription()),
             () -> Assertions.assertEquals(images, post.getImages())
         );
