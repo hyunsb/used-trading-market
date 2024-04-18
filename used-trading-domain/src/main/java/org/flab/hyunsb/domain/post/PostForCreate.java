@@ -5,5 +5,4 @@ import org.flab.hyunsb.domain.post.vo.Images;
 public record PostForCreate(long memberId, long regionId, long categoryId,
                             Price price, String title, String description, Images images) {
 
-
 }

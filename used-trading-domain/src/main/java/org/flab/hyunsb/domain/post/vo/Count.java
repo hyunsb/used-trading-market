@@ -35,12 +35,6 @@ public class Count {
         decreaseCount(1);
     }
 
-    /*
-    * 카운트 감소 작업에서 동시성 문제 밠애시 카운트가 음수로 변경될 가능성이 존재한다.
-    * 카운트 증가 작업은 데이터가 누락되어도 문제가 되지 않으니
-    * AtomicInteger로 동시성을 처리할 경우 성능 오버헤드가 발생할 수 있다.
-    * 따라서 카운트 감소 작업만 동기화 처리한다.
-    * */
     public synchronized void decreaseCount(int number) {
         validateNumberForChangeCount(number);
         validateIsPossibleDecrease(number);
