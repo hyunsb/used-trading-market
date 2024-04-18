@@ -18,7 +18,7 @@ public class PostService implements CreatePostUseCase {
     private final CategoryValidator categoryValidator;
 
     @Override
-    public Long createMember(PostForCreate postForCreate) {
+    public Long createPost(PostForCreate postForCreate) {
         regionValidator.validateRegionId(postForCreate.regionId());
         categoryValidator.validateCategoryId(postForCreate.categoryId());
 
