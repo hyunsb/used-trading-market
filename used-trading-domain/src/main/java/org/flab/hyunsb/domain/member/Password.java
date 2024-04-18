@@ -1,7 +1,7 @@
 package org.flab.hyunsb.domain.member;
 
 import lombok.Getter;
-import org.flab.hyunsb.domain.exception.PasswordNotMatchedException;
+import org.flab.hyunsb.domain.exception.PasswordConstraintException;
 import org.flab.hyunsb.domain.member.encryptor.Encryptor;
 import org.flab.hyunsb.domain.member.encryptor.PasswordEncryptor;
 
@@ -19,7 +19,7 @@ public class Password {
 
     private static void validatePassword(String password) {
         if (password.isBlank()) {
-            throw new PasswordNotMatchedException();
+            throw new PasswordConstraintException();
         }
     }
 

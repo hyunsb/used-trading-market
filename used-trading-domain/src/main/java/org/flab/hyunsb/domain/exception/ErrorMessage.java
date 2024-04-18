@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum ErrorMessage {
 
     LOGIN_FAILED("로그인 실패: 올바른 정보를 입력하세요."),
-    PASSWORD_NOT_MATCHED("비밀번호가 일치하지 않습니다.");
+    CREATE_PASSWORD_FAILED("비밀번호 생성 실패");
 
     private final String message;
 }

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.flab.hyunsb.application.exception.authentication.AuthenticationException;
 import org.flab.hyunsb.application.exception.constraint.ConstraintException;
 import org.flab.hyunsb.domain.exception.MemberAuthException;
+import org.flab.hyunsb.domain.exception.PasswordConstraintException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -31,7 +32,7 @@ public class ExceptionControllerAdvice {
         );
     }
 
-    @ExceptionHandler(ConstraintException.class)
+    @ExceptionHandler({ConstraintException.class, PasswordConstraintException.class})
     public ErrorResponse constraintException(
         ConstraintException exception, HttpServletRequest request) {
         logError(exception, request.getRequestURL().toString());
