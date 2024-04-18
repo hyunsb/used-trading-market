@@ -49,4 +49,3 @@ public class MemberRestAdapter {
         response.setHeader(ACTOR_TOKEN_HEADER, accessToken);
     }
 }
-

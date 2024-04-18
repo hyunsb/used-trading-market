@@ -10,6 +10,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.util.Date;
 import javax.crypto.SecretKey;
+import org.flab.hyunsb.application.dto.Actor;
 import org.flab.hyunsb.application.exception.authentication.ActorTokenInvalidException;
 import org.flab.hyunsb.application.usecase.member.ActorTokenAuthUseCase;
 import org.flab.hyunsb.application.util.DateGenerator;
@@ -22,6 +23,8 @@ public class ActorTokenService implements ActorTokenAuthUseCase {
     private static final long EXP = 1000L * 60 * 60 * 48;
     private static final String TOKEN_PREFIX = "Bearer";
     private static final String TOKEN_DELIMITER = " ";
+    private static final String CLAIM_NAME_ACTOR_ID = "actorId";
+    private static final String CLAIM_NAME_REGION_ID = "regionId";
 
     private final DateGenerator dateGenerator;
     private final SecretKey secretKey;
@@ -31,9 +34,10 @@ public class ActorTokenService implements ActorTokenAuthUseCase {
         this.secretKey = Keys.hmacShaKeyFor(key.getBytes());
     }
 
-    public String createActorToken(Long actorId) {
+    public String createActorToken(Long actorId, Long regionId) {
         String token = Jwts.builder()
-            .subject(String.valueOf(actorId))
+            .claim(CLAIM_NAME_ACTOR_ID, actorId)
+            .claim(CLAIM_NAME_REGION_ID, regionId)
             .expiration(dateGenerator.getExpireDate(EXP))
             .signWith(secretKey)
             .compact();
@@ -42,7 +46,7 @@ public class ActorTokenService implements ActorTokenAuthUseCase {
     }
 
     @Override
-    public Long authenticate(String token) {
+    public Actor authenticate(String token) {
         validateFormat(token);
         return readToken(token);
     }
@@ -53,11 +57,13 @@ public class ActorTokenService implements ActorTokenAuthUseCase {
         }
     }
 
-    private Long readToken(String token) {
+    private Actor readToken(String token) {
         Claims payload = parsePayload(token);
         validateExpirationDate(payload.getExpiration());
 
-        return Long.parseLong(payload.getSubject());
+        Long actorId = payload.get(CLAIM_NAME_ACTOR_ID, Long.class);
+        Long regionId = payload.get(CLAIM_NAME_REGION_ID, Long.class);
+        return new Actor(actorId, regionId);
     }
 
     private Claims parsePayload(String token) {
