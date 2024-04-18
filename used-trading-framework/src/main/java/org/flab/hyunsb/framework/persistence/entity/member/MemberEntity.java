@@ -42,6 +42,10 @@ public class MemberEntity extends BaseTimeEntity {
     @Column(nullable = false)
     private String nickname;
 
+    private MemberEntity(Long id) {
+        this.id = id;
+    }
+
     public Member toDomain() {
         return new Member(id, region.getId(), email, Password.valueOf(password), nickname);
     }
@@ -54,5 +58,9 @@ public class MemberEntity extends BaseTimeEntity {
             member.getPassword(),
             member.getNickname()
         );
+    }
+
+    public static MemberEntity valueOf(Long id) {
+        return new MemberEntity(id);
     }
 }
