@@ -21,9 +21,4 @@ public class Price {
             throw new PostConstraintException();
         }
     }
-
-    private void changePrice(int price) {
-        validatePrice(price);
-        this.price = price;
-    }
 }
