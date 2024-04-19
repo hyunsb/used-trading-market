@@ -1,5 +1,6 @@
 package org.flab.hyunsb.bootstrap.rest.adapter;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.flab.hyunsb.application.dto.Actor;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/post")
+@RequestMapping("/api/v1/posts")
 @RestController
 public class PostRestAdapter {
 
@@ -25,7 +26,7 @@ public class PostRestAdapter {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Long createPost(@LoginActor Actor actor,
-        @RequestBody PostCreateRequest postCreateRequest) {
+        @Valid @RequestBody PostCreateRequest postCreateRequest) {
 
         PostForCreate postForCreate = postCreateRequest.toDomain(actor.actorId(), actor.regionId());
 
