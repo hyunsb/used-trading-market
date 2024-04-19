@@ -19,7 +19,6 @@ import org.flab.hyunsb.domain.post.vo.Images;
 import org.flab.hyunsb.framework.persistence.entity.basetime.BaseTimeEntity;
 
 @Getter
-@Builder(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "image")
