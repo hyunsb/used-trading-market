@@ -1,6 +1,8 @@
 package org.flab.hyunsb.application.usecase.member;
 
+import org.flab.hyunsb.application.dto.Actor;
+
 public interface ActorTokenAuthUseCase {
 
-    Long authenticate(String actorToken);
+    Actor authenticate(String actorToken);
 }
