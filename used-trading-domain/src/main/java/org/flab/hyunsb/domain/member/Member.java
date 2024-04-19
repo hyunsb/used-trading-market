@@ -1,8 +1,11 @@
 package org.flab.hyunsb.domain.member;
 
+import static org.flab.hyunsb.domain.exception.ErrorMessage.PASSWORD_NOT_MATCHED;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.flab.hyunsb.domain.exception.LoginFailureException;
+import org.flab.hyunsb.domain.exception.MemberAuthException;
 
 @Getter
 @AllArgsConstructor
@@ -41,7 +44,7 @@ public class Member {
 
     public void changePassword(String currentPassword, String newPassword) {
         if (!password.isMatch(currentPassword)) {
-            throw new IllegalArgumentException();
+            throw new MemberAuthException(PASSWORD_NOT_MATCHED);
         }
         password = Password.generateWithEncrypting(newPassword);
     }
