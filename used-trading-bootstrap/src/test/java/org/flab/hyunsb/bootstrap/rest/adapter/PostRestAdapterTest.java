@@ -35,12 +35,11 @@ class PostRestAdapterTest extends AbstractRestDocsTests {
     private ActorTokenAuthUseCase actorTokenAuthUseCase;
 
     @ParameterizedTest
-    @ValueSource(ints = {1, -1})
+    @ValueSource(ints = {1, 0})
     @DisplayName("[게시글 등록 핸들러 성공 테스트] 게시글 등록 성공 시 해당 게시글의 식별자를 반환한다.")
-    public void registrationMember_successTest(int thumbnail) throws Exception {
+    public void registrationMember_successTest(Integer thumbnailNumber) throws Exception {
         // Given
         String requestUrl = "/api/v1/posts";
-        Integer thumbnailNumber = thumbnail > 0 ? thumbnail : null;
         when(actorTokenAuthUseCase.authenticate(ArgumentMatchers.anyString()))
             .thenReturn(new Actor(1L, 1L));
 

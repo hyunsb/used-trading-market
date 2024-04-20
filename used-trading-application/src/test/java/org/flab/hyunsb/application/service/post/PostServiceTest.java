@@ -40,7 +40,7 @@ public class PostServiceTest {
 
     @BeforeEach
     void setUp() {
-        Images images = Images.generateImagesExcludeThumbnail(List.of("image1", "image2"));
+        Images images = new Images(List.of("image1", "image2"));
         testPostForCreate =
             new PostForCreate(1L, 1L, 1L, new Price(0), "title", "description", images);
     }

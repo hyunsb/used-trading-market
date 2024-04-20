@@ -46,7 +46,7 @@ class PostPersistenceAdapterTest {
     @DisplayName("[post 생성 성공 테스트] post 도메인이 주어진 경우 post를 영속화 한 뒤 Id를 반환한다.")
     public void Test() {
         // Given
-        Images images = Images.generateImagesExcludeThumbnail(List.of("Image1", "Image1", "Image1"));
+        Images images = new Images(List.of("Image1", "Image1", "Image1"));
         Price price = new Price(1000);
 
         PostForCreate postForCreate = new PostForCreate(

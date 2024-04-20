@@ -1,7 +1,5 @@
 package org.flab.hyunsb.domain.post.vo;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.List;
 import org.flab.hyunsb.domain.post.exception.PostConstraintException;
 import org.junit.jupiter.api.Assertions;
@@ -16,7 +14,7 @@ class ImagesTest {
         // Given
         List<String> imageUrls = List.of("image1", "image2", "image3");
         // When
-        Images images = Images.generateImagesExcludeThumbnail(imageUrls);
+        Images images = new Images(imageUrls);
         // Then
         Assertions.assertAll(
             () -> Assertions.assertEquals("image1", images.getThumbnail()),
@@ -31,7 +29,7 @@ class ImagesTest {
         int thumbnailNumber = 2;
         List<String> imageUrls = List.of("image1", "image2", "image3");
         // When
-        Images images = Images.generateImagesIncludeThumbnail(thumbnailNumber, imageUrls);
+        Images images = new Images(thumbnailNumber, imageUrls);
         // Then
         Assertions.assertAll(
             () -> Assertions.assertEquals("image3", images.getThumbnail()),
@@ -47,7 +45,7 @@ class ImagesTest {
         // When & Then
         Assertions.assertAll(
             () -> Assertions.assertThrows(PostConstraintException.class, () ->
-                Images.generateImagesExcludeThumbnail(emptyList))
+                new Images(emptyList))
         );
     }
 
@@ -61,7 +59,7 @@ class ImagesTest {
         // When & Then
         Assertions.assertAll(
             () -> Assertions.assertThrows(PostConstraintException.class, () ->
-                Images.generateImagesIncludeThumbnail(thumbnailNumber, imageUrls))
+                new Images(thumbnailNumber, imageUrls))
         );
     }
 }

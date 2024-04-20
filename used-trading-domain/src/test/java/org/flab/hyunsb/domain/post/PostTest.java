@@ -15,7 +15,8 @@ public class PostTest {
         Price price = new Price(100);
         String description = "testDescription";
         String title = "testTitle";
-        Images images = Images.generateImagesExcludeThumbnail(List.of("image1"));
+        Images images = new Images(List.of("image1"));
+
         PostForCreate postForCreate =
             new PostForCreate(1L, 2L, 3L, price, title, description, images);
         // When

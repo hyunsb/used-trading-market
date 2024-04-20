@@ -1,5 +1,7 @@
 package org.flab.hyunsb.bootstrap.rest.dto.post;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -28,23 +30,18 @@ public class PostCreateRequest {
     @NotNull
     private Integer price;
 
+    @NotNull
+    @Min(value = 0)
+    @Max(value = 10)
     private Integer thumbnailNumber;
 
     @NotNull
     private List<String> images;
 
     public PostForCreate toDomain(Long memberId, Long regionId) {
-        Images images = generateImages(thumbnailNumber, this.images);
+        Images images = new Images(thumbnailNumber, this.images);
         Price price = new Price(this.price);
 
         return new PostForCreate(memberId, regionId, categoryId, price, title, description, images);
     }
-
-    private Images generateImages(Integer thumbnailNumber, List<String> images) {
-        if (thumbnailNumber == null) {
-            return Images.generateImagesExcludeThumbnail(images);
-        }
-        return Images.generateImagesIncludeThumbnail(thumbnailNumber, images);
-    }
-
 }
