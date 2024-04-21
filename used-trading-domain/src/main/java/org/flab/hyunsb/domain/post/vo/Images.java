@@ -1,5 +1,6 @@
 package org.flab.hyunsb.domain.post.vo;
 
+import java.util.Collections;
 import java.util.List;
 import lombok.Getter;
 import org.flab.hyunsb.domain.post.exception.PostConstraintException;
@@ -34,5 +35,9 @@ public class Images {
         if (thumbnailNumber >= imageNumber) {
             throw new PostConstraintException("썸네일 번호가 유효하지 않음");
         }
+    }
+
+    public List<String> getImages() {
+        return Collections.unmodifiableList(images);
     }
 }
