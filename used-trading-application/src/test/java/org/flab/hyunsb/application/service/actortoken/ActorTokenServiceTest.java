@@ -6,6 +6,7 @@ import static org.flab.hyunsb.application.exception.message.ActorTokenErrorMessa
 import static org.flab.hyunsb.application.exception.message.ActorTokenErrorMessage.TOKEN_FORMAT_INVALID;
 
 import java.util.Date;
+import org.flab.hyunsb.application.dto.Actor;
 import org.flab.hyunsb.application.exception.authentication.ActorTokenInvalidException;
 import org.flab.hyunsb.application.service.ActorTokenService;
 import org.flab.hyunsb.application.service.actortoken.mock.MockDateGenerator;
@@ -32,12 +33,14 @@ class ActorTokenServiceTest {
     public void createActorToken_successTest() {
         // Given
         Long actorId = 1L;
+        Long regionId = 1L;
         // When
-        String actorToken = actorTokenService.createActorToken(actorId);
-        Long actual = actorTokenService.authenticate(actorToken);
+        String actorToken = actorTokenService.createActorToken(actorId, regionId);
+        Actor actor = actorTokenService.authenticate(actorToken);
         // Then
         Assertions.assertAll(
-            () -> Assertions.assertEquals(actorId, actual)
+            () -> Assertions.assertEquals(actorId, actor.actorId()),
+            () -> Assertions.assertEquals(regionId, actor.regionId())
         );
     }
 
@@ -46,7 +49,8 @@ class ActorTokenServiceTest {
     public void authenticateActorToken_failureTest_invalidToken() {
         // Given
         Long actorId = 1L;
-        String actorToken = actorTokenService.createActorToken(actorId) + "invalid";
+        Long regionId = 1L;
+        String actorToken = actorTokenService.createActorToken(actorId, regionId) + "invalid";
         // When & Then
         Assertions.assertAll(
             () -> assertThatThrownBy(() -> actorTokenService.authenticate(actorToken))
@@ -60,7 +64,8 @@ class ActorTokenServiceTest {
     public void authenticateActorToken_failureTest_invalidTokenFormat() {
         // Given
         Long actorId = 1L;
-        String actorToken = "invalid" + actorTokenService.createActorToken(actorId);
+        Long regionId = 1L;
+        String actorToken = "invalid" + actorTokenService.createActorToken(actorId, regionId);
         // When & Then
         Assertions.assertAll(
             () -> assertThatThrownBy(() -> actorTokenService.authenticate(actorToken))
@@ -74,7 +79,8 @@ class ActorTokenServiceTest {
     public void authenticateActorToken_failureTest_expiredToken() {
         // Given
         Long actorId = 1L;
-        String actorToken = actorTokenService.createActorToken(actorId);
+        Long regionId = 1L;
+        String actorToken = actorTokenService.createActorToken(actorId, regionId);
         mockDateGenerator.setCurrentDate(new Date(System.currentTimeMillis() + 259200000));
         // When & Then
         Assertions.assertAll(

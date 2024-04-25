@@ -39,9 +39,10 @@ public class MemberService implements CreateMemberUseCase, LoginUseCase {
     public String login(MemberForLogin memberForLogin) {
         Member member = memberOutputPort.findByEmail(memberForLogin.email())
             .orElseThrow(MemberNotFoundException::new);
+        regionValidator.validateRegionId(member.getRegionId());
 
         member.tryToLogin(memberForLogin);
 
-        return jwtService.createActorToken(member.getId());
+        return jwtService.createActorToken(member.getId(), member.getRegionId());
     }
 }

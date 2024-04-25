@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class ActorTokenConfig implements WebMvcConfigurer {
 
     public static final String ACTOR_TOKEN_HEADER = "Authorization";
-    public static final String ACTOR_ID_ATTRIBUTE = "actorId";
+    public static final String ACTOR_ATTRIBUTE = "actor";
 
     private final ActorTokenAuthUseCase actorTokenAuthUseCase;
 

@@ -1,6 +1,6 @@
 package org.flab.hyunsb.bootstrap.rest.actortoken;
 
-import static org.flab.hyunsb.bootstrap.config.ActorTokenConfig.ACTOR_ID_ATTRIBUTE;
+import static org.flab.hyunsb.bootstrap.config.ActorTokenConfig.ACTOR_ATTRIBUTE;
 import static org.flab.hyunsb.bootstrap.config.ActorTokenConfig.ACTOR_TOKEN_HEADER;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
+import org.flab.hyunsb.application.dto.Actor;
 import org.flab.hyunsb.application.usecase.member.ActorTokenAuthUseCase;
 import org.flab.hyunsb.bootstrap.rest.exception.ActorTokenException;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,8 +24,8 @@ public class ActorTokenAuthInterceptor implements HandlerInterceptor {
         Object handler) throws Exception {
 
         String actorToken = getToken(request);
-        Long actorId = actorTokenAuthUseCase.authenticate(actorToken);
-        request.setAttribute(ACTOR_ID_ATTRIBUTE, actorId);
+        Actor actor = actorTokenAuthUseCase.authenticate(actorToken);
+        request.setAttribute(ACTOR_ATTRIBUTE, actor);
 
         return true;
     }

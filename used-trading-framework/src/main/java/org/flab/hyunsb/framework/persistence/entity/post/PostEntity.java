@@ -12,9 +12,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.flab.hyunsb.domain.post.Post;
 import org.flab.hyunsb.framework.persistence.entity.basetime.BaseTimeEntity;
 import org.flab.hyunsb.framework.persistence.entity.member.MemberEntity;
 import org.flab.hyunsb.framework.persistence.entity.region.RegionEntity;
@@ -22,6 +25,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 
 @Getter
+@Builder(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
 @DynamicUpdate
@@ -75,5 +79,24 @@ public class PostEntity extends BaseTimeEntity {
     private void prePersistence() {
         likeCount = 0;
         viewCount = 0;
+    }
+
+    public static PostEntity valueOf(Long id) {
+        return PostEntity.builder().id(id).build();
+    }
+
+    public static PostEntity from(Post post) {
+        return PostEntity.builder()
+            .category(CategoryEntity.valueOf(post.getCategoryId()))
+            .member(MemberEntity.valueOf(post.getMemberId()))
+            .region(RegionEntity.valueOf(post.getRegionId()))
+            .status(PostStatus.valueOf(post.getStatus()))
+            .title(post.getTitle())
+            .description(post.getDescription())
+            .price(post.getPrice().getPrice())
+            .thumbnail(post.getImages().getThumbnail())
+            .likeCount(post.getLikeCount().getCount())
+            .viewCount(post.getViewCount().getCount())
+            .build();
     }
 }

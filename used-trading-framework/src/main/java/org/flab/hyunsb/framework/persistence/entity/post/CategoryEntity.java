@@ -23,4 +23,12 @@ public class CategoryEntity extends BaseTimeEntity {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    private CategoryEntity(Long id) {
+        this.id = id;
+    }
+
+    public static CategoryEntity valueOf(Long id) {
+        return new CategoryEntity(id);
+    }
 }

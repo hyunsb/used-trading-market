@@ -1,9 +1,10 @@
 package org.flab.hyunsb.bootstrap.rest.actortoken;
 
-import static org.flab.hyunsb.bootstrap.config.ActorTokenConfig.ACTOR_ID_ATTRIBUTE;
+import static org.flab.hyunsb.bootstrap.config.ActorTokenConfig.ACTOR_ATTRIBUTE;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.flab.hyunsb.application.dto.Actor;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -17,13 +18,13 @@ public class LoginActorArgumentResolver implements HandlerMethodArgumentResolver
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(LoginActor.class)
-            && parameter.getParameterType().equals(Long.class);
+            && parameter.getParameterType().equals(Actor.class);
     }
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
         NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 
-        return webRequest.getAttribute(ACTOR_ID_ATTRIBUTE, 0);
+        return webRequest.getAttribute(ACTOR_ATTRIBUTE, 0);
     }
 }

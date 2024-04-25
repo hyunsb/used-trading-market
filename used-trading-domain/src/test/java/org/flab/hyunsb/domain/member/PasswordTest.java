@@ -1,5 +1,6 @@
 package org.flab.hyunsb.domain.member;
 
+import org.flab.hyunsb.domain.exception.PasswordConstraintException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,9 +38,9 @@ public class PasswordTest {
         String emptyPassword = " ";
         // When & Then
         Assertions.assertAll(
-            () -> Assertions.assertThrows(IllegalArgumentException.class, () ->
+            () -> Assertions.assertThrows(PasswordConstraintException.class, () ->
                 Password.valueOf(emptyPassword)),
-            () -> Assertions.assertThrows(IllegalArgumentException.class, () ->
+            () -> Assertions.assertThrows(PasswordConstraintException.class, () ->
                 Password.generateWithEncrypting(emptyPassword))
         );
     }
