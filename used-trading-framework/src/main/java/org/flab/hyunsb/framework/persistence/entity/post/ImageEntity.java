@@ -29,7 +29,7 @@ public class ImageEntity extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false, name = "post_post_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private PostEntity post;
 
