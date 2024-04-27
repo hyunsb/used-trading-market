@@ -11,6 +11,7 @@ import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @Slf4j
 @RestControllerAdvice
@@ -32,9 +33,10 @@ public class ExceptionControllerAdvice {
         );
     }
 
-    @ExceptionHandler({ConstraintException.class, PasswordConstraintException.class})
+    @ExceptionHandler({ConstraintException.class, PasswordConstraintException.class,
+        NotFoundException.class, MethodArgumentTypeMismatchException.class})
     public ErrorResponse constraintException(
-        ConstraintException exception, HttpServletRequest request) {
+        RuntimeException exception, HttpServletRequest request) {
         logError(exception, request.getRequestURL().toString());
 
         return ErrorResponse.create(exception, HttpStatus.BAD_REQUEST, exception.getMessage());

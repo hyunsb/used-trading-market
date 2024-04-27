@@ -23,7 +23,7 @@ public class ActorTokenConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new ActorTokenAuthInterceptor(actorTokenAuthUseCase))
             .order(1)
-            .addPathPatterns("/**")
+            .addPathPatterns("/api/v1/posts/**")
             .excludePathPatterns("/error", "/api/v1/members/login", "/api/v1/members");
     }
 
