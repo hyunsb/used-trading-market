@@ -39,6 +39,11 @@ https://url.kr/uy2dkf
 
 <br>
 
+### 🔶 애플리케이션 모듈 아키텍처
+![image](https://github.com/f-lab-edu/used-trading-market/assets/96504592/8eb2a330-3ca7-4cff-9f11-9d85c3a9f13f)
+
+<br>
+
 ### 🔶 데이터베이스 ERD
 ![image](https://github.com/f-lab-edu/used-trading-market/assets/96504592/5069b994-f673-4716-aba1-ac63dd1e0bd8)
 
