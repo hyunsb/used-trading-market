@@ -1,5 +1,7 @@
 package org.flab.hyunsb.framework.persistence.adapter;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import org.flab.hyunsb.domain.post.Post;
 import org.flab.hyunsb.domain.post.PostForCreate;
@@ -7,9 +9,12 @@ import org.flab.hyunsb.domain.post.Price;
 import org.flab.hyunsb.domain.post.vo.Images;
 import org.flab.hyunsb.framework.persistence.entity.member.MemberEntity;
 import org.flab.hyunsb.framework.persistence.entity.post.CategoryEntity;
+import org.flab.hyunsb.framework.persistence.entity.post.PostEntity;
+import org.flab.hyunsb.framework.persistence.entity.post.PostStatus;
 import org.flab.hyunsb.framework.persistence.entity.region.RegionEntity;
 import org.flab.hyunsb.framework.persistence.repository.CategoryRepository;
 import org.flab.hyunsb.framework.persistence.repository.MemberRepository;
+import org.flab.hyunsb.framework.persistence.repository.PostRepository;
 import org.flab.hyunsb.framework.persistence.repository.RegionRepository;
 import org.flab.hyunsb.framework.repository.annotation.RepositoryTest;
 import org.junit.jupiter.api.Assertions;
@@ -17,12 +22,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 
 @RepositoryTest
 class PostPersistenceAdapterTest {
 
     @Autowired
     private PostPersistenceAdapter postPersistenceAdapter;
+
+    @Autowired
+    private PostRepository postRepository;
 
     private RegionEntity testRegion;
     private MemberEntity testMember;
@@ -44,7 +53,7 @@ class PostPersistenceAdapterTest {
 
     @Test
     @DisplayName("[post 생성 성공 테스트] post 도메인이 주어진 경우 post를 영속화 한 뒤 Id를 반환한다.")
-    public void Test() {
+    public void savePost_successTest() {
         // Given
         Images images = new Images(List.of("Image1", "Image1", "Image1"));
         Price price = new Price(1000);
