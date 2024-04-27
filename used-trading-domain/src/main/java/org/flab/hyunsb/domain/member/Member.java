@@ -27,11 +27,12 @@ public class Member {
         );
     }
 
-    public void tryToLogin(MemberForLogin memberForLogin) {
+    public Member tryToLogin(MemberForLogin memberForLogin) throws LoginFailureException {
         if (!isMatchingEmail(memberForLogin.email()) ||
             !password.isMatch(memberForLogin.password())) {
             throw new LoginFailureException();
         }
+        return this;
     }
 
     private boolean isMatchingEmail(String email) {
@@ -42,10 +43,11 @@ public class Member {
         return password.getPassword();
     }
 
-    public void changePassword(String currentPassword, String newPassword) {
+    public Member changePassword(String currentPassword, String newPassword) throws MemberAuthException {
         if (!password.isMatch(currentPassword)) {
             throw new MemberAuthException(PASSWORD_NOT_MATCHED);
         }
         password = Password.generateWithEncrypting(newPassword);
+        return this;
     }
 }
